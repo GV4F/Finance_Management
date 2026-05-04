@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gvaf_finance_app/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,46 +10,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+
+
+    return MaterialApp.router(
+      title: 'Finance Manager',
+      routerConfig: appRouter,
       theme: ThemeData(
-        
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    
-    return Scaffold(
-      appBar: AppBar(
-        
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-            Text('Hello World'),
-          ],
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF1E1E1E),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: Color(0xFFFF0088),
+          contentTextStyle: TextStyle(color: Color(0xFF1E1E1E)),
         ),
-      ),
+
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF00E6E6),
+          secondary: Color(0xFF00B3B3),
+          tertiary: Color(0xFFFF0088),
+          onPrimary: Color(0xFF1E1E1E),
+          surface: Color(0xFF4D4D4D),
+          onSurface: Color(0xFFCECECE),
+        )
+      )
     );
   }
 }
