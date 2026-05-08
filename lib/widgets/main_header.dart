@@ -41,10 +41,10 @@ class _MainHeaderState extends State<MainHeader> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Welcome Back, GVAF!',
+                      'Welcome Back, GVAF !',
                       style: TextStyle(
                         color: colors.onPrimary,
-                        fontSize: 25,
+                        fontSize: 19,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

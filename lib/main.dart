@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Finance Manager',
       routerConfig: appRouter,
       theme: ThemeData(
+        fontFamily: 'BrunoAce',
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF1E1E1E),
         snackBarTheme: const SnackBarThemeData(
