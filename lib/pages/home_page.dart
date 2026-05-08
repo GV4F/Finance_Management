@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // * WIDGETS
 import '../widgets/main_header.dart';
 import '../widgets/actions_section.dart';
+import '../widgets/upcoming_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
           MainHeader(),
           const SizedBox(height: 20),
           const ActionsSection(),
+          const SizedBox(height: 20),
+          const UpcomingSection(),
         ],
       )
     );
