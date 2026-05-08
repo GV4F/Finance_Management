@@ -75,7 +75,7 @@ class _MainHeaderState extends State<MainHeader> {
                               'Available Balance',
                               style: TextStyle(
                                 color: colors.onSurface,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                             IconButton(
@@ -88,7 +88,7 @@ class _MainHeaderState extends State<MainHeader> {
                           '*******',
                           style: TextStyle(
                             color: colors.primary,
-                            fontSize: 28,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )
