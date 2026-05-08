@@ -89,3 +89,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  fonts:
+    - family: BrunoAce
+      fonts:
+        - asset: assets/fonts/Bruno_Ace/BrunoAce-Regular.ttf
