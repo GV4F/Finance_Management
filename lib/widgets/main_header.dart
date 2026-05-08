@@ -17,7 +17,7 @@ class _MainHeaderState extends State<MainHeader> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 50.0, bottom: 20.0),
+      padding: const EdgeInsets.only(top: 50.0, bottom: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
