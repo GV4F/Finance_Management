@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// * WIDGETS
+import '../widgets/header_page.dart';
+import '../widgets/historial_section.dart';
+
 class HistorialPage extends StatefulWidget {
   const HistorialPage({super.key});
 
@@ -10,6 +14,13 @@ class HistorialPage extends StatefulWidget {
 class _HistorialPageState extends State<HistorialPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Column(
+        children: [
+          HeaderPage(titlePage: 'Historial'),
+          HistorialSection(),
+        ],
+      ),
+    );
   }
 }

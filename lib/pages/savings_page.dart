@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// * Widgets
+import 'package:gvaf_finance_app/widgets/header_page.dart';
+
 class SavingsPage extends StatefulWidget {
   const SavingsPage({super.key});
 
@@ -10,6 +13,12 @@ class SavingsPage extends StatefulWidget {
 class _SavingsPageState extends State<SavingsPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Column(
+        children: [
+          HeaderPage(titlePage: 'Savings')
+        ],
+      ),
+    );
   }
 }
