@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// * WIDGETS
+import '../widgets/savings_card.dart';
+
 class SavingsSection extends StatefulWidget {
   const SavingsSection({super.key});
 
@@ -50,13 +53,13 @@ class _SavingsSectionState extends State<SavingsSection> {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 30.0,
+                  horizontal: 24.0,
+                ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Color(0xFFB95CE4), 
-                      colors.primary,
-                    ],
+                    colors: [Color(0xFFB95CE4), colors.primary],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -93,11 +96,11 @@ class _SavingsSectionState extends State<SavingsSection> {
                         color: colors.onPrimary,
                         fontSize: 32.0,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'BrunoAce', 
+                        fontFamily: 'BrunoAce',
                       ),
                     ),
                     const SizedBox(height: 15.0),
-                
+
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final double maxWidth = constraints.maxWidth;
@@ -114,7 +117,7 @@ class _SavingsSectionState extends State<SavingsSection> {
                                 borderRadius: BorderRadius.circular(11.0),
                               ),
                             ),
-                        
+
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 500),
                               curve: Curves.easeOutCubic,
@@ -125,7 +128,9 @@ class _SavingsSectionState extends State<SavingsSection> {
                                 borderRadius: BorderRadius.circular(11.0),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: colors.primary.withValues(alpha: 0.5),
+                                    color: colors.primary.withValues(
+                                      alpha: 0.5,
+                                    ),
                                     blurRadius: 8.0,
                                     offset: const Offset(0, 0),
                                   ),
@@ -138,8 +143,8 @@ class _SavingsSectionState extends State<SavingsSection> {
                                 child: Text(
                                   "${(percentage * 100).toInt()}%",
                                   style: TextStyle(
-                                    color: percentage > 0.55 
-                                        ? colors.onPrimary 
+                                    color: percentage > 0.50
+                                        ? colors.onPrimary
                                         : colors.primary,
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.bold,
@@ -166,9 +171,18 @@ class _SavingsSectionState extends State<SavingsSection> {
                   ],
                 ),
               ),
+
+              const SizedBox(height: 12.0),
+
+              const SavingsCard(
+                title: "Main Savings",
+                savedAmount: 2800,
+                goalAmount: 3000,
+                // onEdit: () {},
+              ),
             ],
-          )
-        )
+          ),
+        ),
       ],
     );
   }
