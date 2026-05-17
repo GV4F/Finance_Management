@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 // * Widgets
-import 'package:gvaf_finance_app/widgets/header_page.dart';
+import '../widgets/header_page.dart';
+import '../widgets/savings_section.dart';
 
 class SavingsPage extends StatefulWidget {
   const SavingsPage({super.key});
@@ -16,7 +17,9 @@ class _SavingsPageState extends State<SavingsPage> {
     return Scaffold(
       body: Column(
         children: [
-          HeaderPage(titlePage: 'Savings')
+          HeaderPage(titlePage: 'Savings'),
+          SizedBox(height: 20),
+          SavingsSection()
         ],
       ),
     );
