@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:gvaf_finance_app/router.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
     overlays: [SystemUiOverlay.top]
   );
+
+  await Supabase.initialize(
+    url: 'https://ulkewvhalcrqsdymwdde.supabase.co',
+    anonKey: 'sb_publishable_0YBGmnxZnhMasttfH7NZxA_wuw_JqHy',
+  );
+
   runApp(const MyApp());
 }
 
