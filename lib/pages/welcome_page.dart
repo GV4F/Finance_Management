@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -79,7 +80,9 @@ class WelcomePage extends StatelessWidget {
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push('/sign/signup');
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: colors.tertiary,
                             foregroundColor: colors.onPrimary,
@@ -112,7 +115,9 @@ class WelcomePage extends StatelessWidget {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.push('/sign/login');
+                            },
                             child: Text(
                               'Log In',
                               style: TextStyle(
