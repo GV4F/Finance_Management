@@ -55,6 +55,7 @@ class _InputSignState extends State<InputSign> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
+        controller: widget.controller,
         focusNode: _focusNode,
         obscureText: widget.isPassword,
         style: TextStyle(color: colors.onSurface),

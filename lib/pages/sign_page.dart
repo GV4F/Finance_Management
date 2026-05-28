@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
 import '../widgets/input_sign.dart';
+import 'package:go_router/go_router.dart';
 
 class SignPage extends StatefulWidget {
   final bool isLogin;
@@ -28,6 +29,67 @@ class _SignPageState extends State<SignPage> {
     _usernameController.dispose();
     super.dispose();
   }
+
+  Future<void> _signUp() async {
+    final name = _usernameController.text;
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    try {
+      final response = await authService.signUpWithEmail(name, email, password);
+      if (!mounted) return;
+      if (response.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign up successful!')),
+        );
+        context.go('/');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
+  Future<void> _logIn () async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    try {
+      final response = await authService.signInWithEmail(email, password);
+      if (!mounted) return;
+      if (response.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
+        context.go('/');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
+  // Future
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +148,7 @@ class _SignPageState extends State<SignPage> {
             SizedBox(
               width: 150,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: widget.isLogin ? _logIn : _signUp,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.primary,
                   foregroundColor: colors.onPrimary,
