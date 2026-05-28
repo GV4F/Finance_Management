@@ -100,7 +100,6 @@ flutter:
         - asset: assets/fonts/Bruno_Ace/BrunoAce-Regular.ttf
   assets:
     - assets/images/Card.png
-    - .env
 
 flutter_launcher_icons:
   android: "launcher_icon"

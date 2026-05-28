@@ -5,11 +5,13 @@ class InputSign extends StatefulWidget {
   final String hinText;
   final IconData icon;
   final bool isPassword;
+  final TextEditingController controller;
 
   const InputSign({
     required this.hinText,
     required this.icon,
     this.isPassword = false,
+    required this.controller,
     super.key
   });
 

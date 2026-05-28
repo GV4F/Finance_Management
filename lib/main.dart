@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gvaf_finance_app/router.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'utils/env.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load();
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
@@ -14,8 +14,8 @@ void main() async {
   );
 
   await Supabase.initialize(
-    url: dotenv.env['URL']!,
-    anonKey: dotenv.env['ANONKEY']!,
+    url: EnvConfig.url,
+    anonKey: EnvConfig.anonKey,
   );
 
   runApp(const MyApp());

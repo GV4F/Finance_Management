@@ -17,6 +17,18 @@ class _SignPageState extends State<SignPage> {
 
   final authService = AuthService();
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _usernameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -52,6 +64,7 @@ class _SignPageState extends State<SignPage> {
               InputSign(
                 hinText: 'Username',
                 icon: Icons.person_outline,
+                controller: _usernameController,
               ),
               const SizedBox(height: 10),
             ],
@@ -59,11 +72,13 @@ class _SignPageState extends State<SignPage> {
             InputSign(
               hinText: 'Email',
               icon: Icons.email_outlined,
+              controller: _emailController,
             ),
             const SizedBox(height: 10),
             InputSign(
               hinText: 'Password',
               icon: Icons.lock_outlined,
+              controller: _passwordController,
               isPassword: true,
             ),
             
