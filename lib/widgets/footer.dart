@@ -35,7 +35,7 @@ class Footer extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.home_outlined),
                   color: colors.onPrimary,
-                  onPressed: () => context.go('/'),
+                  onPressed: () => context.go('/home'),
                 ),
                 IconButton(
                   icon: const Icon(Icons.history_outlined),

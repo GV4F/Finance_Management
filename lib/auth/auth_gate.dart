@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 // * PAGES
 import '../pages/home_page.dart';
@@ -14,13 +15,18 @@ class AuthGate extends StatelessWidget {
       stream: Supabase.instance.client.auth.onAuthStateChange,
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
 
         final session = snapshot.hasData ? snapshot.data!.session : null;
         final user = session?.user;
 
         if(user != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.go('/home');
+          });
           return const HomePage();
         }
         return const WelcomePage();

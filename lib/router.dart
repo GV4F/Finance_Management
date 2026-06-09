@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 
 // * PAGES
-// import './pages/home_page.dart';
+import './pages/home_page.dart';
 import './pages/historial_page.dart';
 import './pages/savings_page.dart';
 import './pages/profile_page.dart';
@@ -29,6 +29,10 @@ final GoRouter appRouter = GoRouter(
         return MainPage(child: child);
       },
       routes: [
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomePage(),
+        ),
         GoRoute(
           path: '/historial',
           builder: (context, state) => const HistorialPage(),

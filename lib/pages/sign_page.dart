@@ -31,9 +31,9 @@ class _SignPageState extends State<SignPage> {
   }
 
   Future<void> _signUp() async {
-    final name = _usernameController.text;
-    final email = _emailController.text;
-    final password = _passwordController.text;
+    final name = _usernameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
       if (!mounted) return;
@@ -61,8 +61,8 @@ class _SignPageState extends State<SignPage> {
   }
 
   Future<void> _logIn () async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
       if (!mounted) return;
