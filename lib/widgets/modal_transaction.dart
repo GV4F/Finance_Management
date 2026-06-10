@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ModalTransaction extends StatefulWidget {
   final String type;
@@ -12,6 +13,56 @@ class ModalTransaction extends StatefulWidget {
 }
 
 class _ModalTransactionState extends State<ModalTransaction> {
+
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    amountController.dispose();
+    typeController.dispose();
+    super.dispose();
+  }
+
+  Future<void> registerTransaction({
+    required String title,
+    required String description,
+    required double amount,
+    required String type
+  }) async {
+    final supabase = Supabase.instance.client; 
+    try {
+      await supabase.from('transaction').insert({
+        'title': title,
+        'description': description,
+        'amount': amount,
+        'type': type,
+        'category': widget.type,
+      });
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Transaction registered successfully!')),
+        );
+        Navigator.of(context).pop();
+      }
+    } catch (error) {
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${error.toString()}')),
+        );
+      }
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
 
@@ -42,6 +93,7 @@ class _ModalTransactionState extends State<ModalTransaction> {
 
             const SizedBox(height: 20),
             TextField(
+              controller: titleController,
               decoration: const InputDecoration(
                 labelText: 'Title',
                 border: OutlineInputBorder(),
@@ -51,6 +103,7 @@ class _ModalTransactionState extends State<ModalTransaction> {
 
             const SizedBox(height: 20),
             TextField(
+              controller: descriptionController,
               decoration: const InputDecoration(
                 labelText: 'Description',
                 border: OutlineInputBorder(),
@@ -60,6 +113,7 @@ class _ModalTransactionState extends State<ModalTransaction> {
 
             const SizedBox(height: 20),
             TextField(
+              controller: amountController,
               decoration: const InputDecoration(
                 labelText: 'Amount',
                 border: OutlineInputBorder(),
@@ -69,6 +123,7 @@ class _ModalTransactionState extends State<ModalTransaction> {
 
             const SizedBox(height: 20),
             TextField(
+              controller: typeController,
               decoration: const InputDecoration(
                 labelText: 'Type',
                 border: OutlineInputBorder(),
@@ -78,7 +133,14 @@ class _ModalTransactionState extends State<ModalTransaction> {
 
             const SizedBox(height: 20),
             GestureDetector(
-              onTap: (){},
+              onTap: () {
+                registerTransaction(
+                  title: titleController.text,
+                  description: descriptionController.text,
+                  amount: double.parse(amountController.text),
+                  type: typeController.text,
+                );
+              },
               child: Container(
                 width: 280,
                 padding: const EdgeInsets.symmetric(vertical: 14),
