@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 
 // * WIDGETS
 import './action_button.dart';
+import './modal_transaction.dart';
 
 class ActionsSection extends StatelessWidget {
   const ActionsSection({super.key});
+
+  void modalTransaction(BuildContext context, String type) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ModalTransaction(type: type);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +24,23 @@ class ActionsSection extends StatelessWidget {
         ActionButton(
           icon: Icons.money_off_outlined,
           bottomText: 'Expense',
-          onTap: () {},
+          onTap: () {
+            modalTransaction(context, 'expense');
+          },
         ),
         ActionButton(
           icon: Icons.attach_money_outlined,
           bottomText: 'Income',
-          onTap: () {},
+          onTap: () {
+            modalTransaction(context, 'income');
+          },
         ),
         ActionButton(
           icon: Icons.savings,
           bottomText: 'Savings',
-          onTap: () {},
+          onTap: () {
+            modalTransaction(context, 'saving');
+          },
         ),
       ],
     );
