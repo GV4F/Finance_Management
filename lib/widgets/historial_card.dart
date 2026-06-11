@@ -1,10 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HistorialCard extends StatelessWidget {
   final String title;
   final String date;
-  final String amount;
+  final double amount;
   final bool type;
   final VoidCallback onTap;
 
@@ -16,6 +17,11 @@ class HistorialCard extends StatelessWidget {
     required this.type,
     required this.onTap,
   });
+
+  String formatCurrency(DateTime value) {
+    final formatDate = DateFormat('yyyy-MM-dd');
+    return formatDate.format(value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +78,7 @@ class HistorialCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            date,
+                            formatCurrency(DateTime.parse(date)),
                             style: TextStyle(
                               fontFamily: 'BrunoAce',
                               color: colors.surface,
@@ -84,7 +90,7 @@ class HistorialCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      amount,
+                      amount.toStringAsFixed(2),
                       style: TextStyle(
                         fontFamily: 'BrunoAce',
                         color: type ? colors.primary : colors.tertiary,

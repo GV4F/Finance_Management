@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // * WIDGETS
 import '../widgets/historial_card.dart';
@@ -11,18 +12,36 @@ class HistorialSection extends StatefulWidget {
 }
 
 class _HistorialSectionState extends State<HistorialSection> {
+
+  @override
+  initState() {
+    super.initState();
+    allTransactions();
+  }
+
+  List<dynamic> transactions = [];
+  Future<void> allTransactions() async {
+    try {
+      final supabase = Supabase.instance.client;
+      final response = await supabase.from('transaction').select().order('date', ascending: false);
+
+      setState(() {
+        transactions = response as List<dynamic>;
+      });
+
+    } catch (e) {
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading transactions: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
     final colors = Theme.of(context).colorScheme;
-
-    final transactions = [
-      {'title': 'Soldering Iron 90w', 'date': 'March 29 - 12:00 PM', 'amount': '- Q.500.00', 'isIncome': false},
-      {'title': 'Pay For Mobile App', 'date': 'March 30 - 1:00 PM', 'amount': '+ Q.5,000.00', 'isIncome': true},
-      // Nota: En tu imagen 'Saving' tiene un color un poco distinto, pero lo tomaré como ingreso positivo por ahora
-      {'title': 'Saving', 'date': 'March 30 - 6:00 PM', 'amount': '+ Q.1,500.00', 'isIncome': true},
-      {'title': 'White Monster', 'date': 'March 30 - 6:00 PM', 'amount': '- Q.17.00', 'isIncome': false},
-    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,8 +85,8 @@ class _HistorialSectionState extends State<HistorialSection> {
             return HistorialCard(
               title: tx['title'] as String,
               date: tx['date'] as String,
-              amount: tx['amount'] as String,
-              type: tx['isIncome'] as bool,
+              amount: (tx['amount'] as num).toDouble(),
+              type: ((tx['category'] as String) == 'income' ? true : false),
               onTap: () {},
             );
           },
