@@ -18,9 +18,14 @@ class HistorialCard extends StatelessWidget {
     required this.onTap,
   });
 
-  String formatCurrency(DateTime value) {
+  String formatDate(DateTime value) {
     final formatDate = DateFormat('yyyy-MM-dd');
     return formatDate.format(value);
+  }
+
+  String formatAmount(double value) {
+    final formatCurrency = NumberFormat.currency(locale: 'es_GT', symbol: 'Q', customPattern: '¤#,##0.00');
+    return formatCurrency.format(value);
   }
 
   @override
@@ -78,7 +83,7 @@ class HistorialCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            formatCurrency(DateTime.parse(date)),
+                            formatDate(DateTime.parse(date)),
                             style: TextStyle(
                               fontFamily: 'BrunoAce',
                               color: colors.surface,
@@ -90,7 +95,7 @@ class HistorialCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      amount.toStringAsFixed(2),
+                      formatAmount(amount),
                       style: TextStyle(
                         fontFamily: 'BrunoAce',
                         color: type ? colors.primary : colors.tertiary,
