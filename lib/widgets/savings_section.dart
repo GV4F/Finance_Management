@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // * WIDGETS
 import '../widgets/savings_card.dart';
@@ -11,6 +12,36 @@ class SavingsSection extends StatefulWidget {
 }
 
 class _SavingsSectionState extends State<SavingsSection> {
+
+  @override
+  initState() {
+    super.initState();
+    fetchSavingsData();
+  }
+
+  List<dynamic> savingsData = [];
+  Future<void> fetchSavingsData() async {
+      final supabase = Supabase.instance.client;
+      final user = supabase.auth.currentUser;
+
+      try {
+        final data = await supabase
+            .from('savings')
+            .select()
+            .eq('id_user', user!.id);
+
+        setState(() {
+          savingsData = data;
+        });
+      } catch (e) {
+        if(mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error fetching savings data: $e')),
+          );
+        }
+      }
+    }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -174,11 +205,23 @@ class _SavingsSectionState extends State<SavingsSection> {
 
               const SizedBox(height: 12.0),
 
-              const SavingsCard(
-                title: "Main Savings",
-                savedAmount: 2800,
-                goalAmount: 3000,
-                // onEdit: () {},
+              ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(height: 12.0),
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                physics: const BouncingScrollPhysics(),
+                itemCount: savingsData.length,
+                itemBuilder: (context, index) {
+                  final saving = savingsData[index];
+                  return SavingsCard(
+                    title: saving['title'] as String,
+                    savedAmount: (saving['actual_amount'] as num).toDouble(),
+                    goalAmount: (saving['objetive_amount'] as num).toDouble(),
+                    onEdit: () {
+                      // Handle edit action here
+                    },
+                  );
+                },
               ),
             ],
           ),
