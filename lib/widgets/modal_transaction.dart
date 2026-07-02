@@ -132,37 +132,40 @@ class _ModalTransactionState extends State<ModalTransaction> {
             ),
 
             const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                registerTransaction(
-                  title: titleController.text,
-                  description: descriptionController.text,
-                  amount: double.parse(amountController.text),
-                  type: typeController.text,
-                );
-              },
-              child: Container(
-                width: 280,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  color: colors.secondary, 
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  registerTransaction(
+                    title: titleController.text,
+                    description: descriptionController.text,
+                    amount: double.parse(amountController.text),
+                    type: typeController.text,
+                  );
+                },
+                child: Container(
+                  width: 280,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: colors.secondary,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colors.onPrimary,
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Register',
+                    style: TextStyle(
                       color: colors.onPrimary,
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
+                      fontFamily: 'Bruce Ace',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  'Register',
-                  style: TextStyle(
-                    color: colors.onPrimary,
-                    fontFamily: 'Bruce Ace',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
