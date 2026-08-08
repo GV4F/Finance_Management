@@ -112,10 +112,9 @@ class SavingsCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Color(0xFFFFCCCC),
-                                Color(0xFFFF5A57),
-                                Color(0xFFE02F75),
-                                Color(0xFF6700A3), 
+                                colors.primary,
+                                colors.secondary,
+                                colors.surface,
                               ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
