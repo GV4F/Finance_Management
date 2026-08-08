@@ -75,21 +75,24 @@ class _HistorialSectionState extends State<HistorialSection> {
         ),
         const SizedBox(height: 16),
         // - Section Content
-        ListView.builder(
-          shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          physics: const BouncingScrollPhysics(),
-          itemCount: transactions.length,
-          itemBuilder: (context, index) {
-            final tx = transactions[index];
-            return HistorialCard(
-              title: tx['title'] as String,
-              date: tx['date'] as String,
-              amount: (tx['amount'] as num).toDouble(),
-              type: ((tx['category'] as String) == 'income' ? true : false),
-              onTap: () {},
-            );
-          },
+
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            physics: const BouncingScrollPhysics(),
+            itemCount: transactions.length,
+            itemBuilder: (context, index) {
+              final tx = transactions[index];
+              return HistorialCard(
+                title: tx['title'] as String,
+                date: tx['date'] as String,
+                amount: (tx['amount'] as num).toDouble(),
+                type: ((tx['category'] as String) == 'income' ? true : false),
+                onTap: () {},
+              );
+            },
+          ),
         ),
       ],
     );

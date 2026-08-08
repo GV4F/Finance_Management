@@ -18,7 +18,7 @@ class _HistorialPageState extends State<HistorialPage> {
       body: Column(
         children: [
           HeaderPage(titlePage: 'Historial'),
-          HistorialSection(),
+          Expanded(child: HistorialSection()),
         ],
       ),
     );
