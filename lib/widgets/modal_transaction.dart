@@ -17,11 +17,14 @@ class _ModalTransactionState extends State<ModalTransaction> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-  final TextEditingController typeController = TextEditingController();
+
+  List<dynamic> allSavings = [];
+  String? selectedSavingId;
 
   @override
   void initState() {
     super.initState();
+    fetchAllSavings();
   }
 
   @override
@@ -29,7 +32,6 @@ class _ModalTransactionState extends State<ModalTransaction> {
     titleController.dispose();
     descriptionController.dispose();
     amountController.dispose();
-    typeController.dispose();
     super.dispose();
   }
 
@@ -37,7 +39,6 @@ class _ModalTransactionState extends State<ModalTransaction> {
     required String title,
     required String description,
     required double amount,
-    required String type
   }) async {
     final supabase = Supabase.instance.client; 
     try {
@@ -45,7 +46,6 @@ class _ModalTransactionState extends State<ModalTransaction> {
         'title': title,
         'description': description,
         'amount': amount,
-        'type': type,
         'category': widget.type,
       });
       if(mounted) {
@@ -54,6 +54,61 @@ class _ModalTransactionState extends State<ModalTransaction> {
         );
         Navigator.of(context).pop();
       }
+    } catch (error) {
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${error.toString()}')),
+        );
+      }
+    }
+  }
+
+  Future<void> registerSavingTransaction({
+    required String title,
+    required String description,
+    required double amount,
+    required String savingId,
+  }) async {
+    final supabase = Supabase.instance.client; 
+    final title = allSavings.firstWhere((s) => s['id'] == savingId)['title'] as String;
+    try {
+      await supabase.from('transaction').insert({
+        'title': title,
+        'description': description,
+        'amount': amount,
+        'category': widget.type,
+      });
+
+      await supabase.rpc(
+        'update_value',
+        params: {
+          'row_id': savingId,
+          'increase': amount,
+        }
+      );
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Transaction registered successfully!')),
+        );
+        Navigator.of(context).pop();
+      }
+    } catch (error) {
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${error.toString()}')),
+        );
+      }
+    }
+  }
+
+  Future<void> fetchAllSavings() async {
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser;
+    try {
+      final response = await supabase.from('savings').select().eq('id_user', user!.id);
+      setState(() {
+        allSavings = response;
+      });
     } catch (error) {
       if(mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -73,8 +128,19 @@ class _ModalTransactionState extends State<ModalTransaction> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xFF141414),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.6),
+              blurRadius: 15,
+              spreadRadius: 2,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
         padding: const EdgeInsets.all(20),
-        color: colors.onPrimary,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -92,14 +158,38 @@ class _ModalTransactionState extends State<ModalTransaction> {
             ),
 
             const SizedBox(height: 20),
-            TextField(
-              controller: titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
+
+            if(widget.type == "saving") ...
+            [
+              DropdownButton<String>(
+                hint: const Text('Select a saving'),
+                value: selectedSavingId,
+                dropdownColor: const Color(0xFF1E1E1E), 
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+                isExpanded: true,
+                items: allSavings.map((savings) {
+                  return DropdownMenuItem<String>(
+                    value: savings['id'] as String,
+                    child: Text(savings['title'] as String),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedSavingId = newValue;
+                  });
+                },
               ),
-              keyboardType: TextInputType.text,
-            ),
+            ] else ... [
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.text,
+              ),
+            ],
 
             const SizedBox(height: 20),
             TextField(
@@ -122,32 +212,43 @@ class _ModalTransactionState extends State<ModalTransaction> {
             ),
 
             const SizedBox(height: 20),
-            TextField(
-              controller: typeController,
-              decoration: const InputDecoration(
-                labelText: 'Type',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.text,
-            ),
-
-            const SizedBox(height: 20),
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  registerTransaction(
-                    title: titleController.text,
-                    description: descriptionController.text,
-                    amount: double.parse(amountController.text),
-                    type: typeController.text,
-                  );
+                  if(widget.type == "saving") {
+                    if(selectedSavingId != null) {
+                      registerSavingTransaction(
+                        title: titleController.text,
+                        description: descriptionController.text,
+                        amount: double.parse(amountController.text),
+                        savingId: selectedSavingId!,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please select a saving.')),
+                      );
+                    }
+                  } else {
+                    registerTransaction(
+                      title: titleController.text,
+                      description: descriptionController.text,
+                      amount: double.parse(amountController.text),
+                    );
+                  }
                 },
                 child: Container(
                   width: 280,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: BoxDecoration(
-                    color: colors.secondary,
+                    gradient: LinearGradient(
+                      colors: [
+                        colors.primary,
+                        colors.secondary,
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
