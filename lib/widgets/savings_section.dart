@@ -20,6 +20,7 @@ class _SavingsSectionState extends State<SavingsSection> {
   }
 
   List<dynamic> savingsData = [];
+  List<dynamic> mainSavingsData = [];
   Future<void> fetchSavingsData() async {
       final supabase = Supabase.instance.client;
       final user = supabase.auth.currentUser;
@@ -30,7 +31,10 @@ class _SavingsSectionState extends State<SavingsSection> {
             .select()
             .eq('id_user', user!.id);
 
+        final mainSavings = data.firstWhere((item) => item['title'] as String == 'Main Savings');
+        if(!mounted) return;
         setState(() {
+          mainSavingsData = [mainSavings];
           savingsData = data;
         });
       } catch (e) {
@@ -45,7 +49,9 @@ class _SavingsSectionState extends State<SavingsSection> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final percentage = 0.6;
+    final percentage = mainSavingsData.isNotEmpty
+        ? (mainSavingsData[0]['actual_amount'] as num) / (mainSavingsData[0]['objetive_amount'] as num)
+        : 0.0;
 
     return Expanded(
       child: Padding(
@@ -93,7 +99,9 @@ class _SavingsSectionState extends State<SavingsSection> {
                     ),
                   ),
                   Text(
-                    "Q.1,800.00",
+                    mainSavingsData.isNotEmpty
+                        ? "Q.${(mainSavingsData[0]['actual_amount'] as num).toStringAsFixed(2)}"
+                        : "Q.0.00",
                     style: TextStyle(
                       color: colors.onPrimary,
                       fontSize: 32.0,
@@ -162,7 +170,9 @@ class _SavingsSectionState extends State<SavingsSection> {
                   const SizedBox(height: 16.0),
 
                   Text(
-                    'Total to Save: Q.3,000.00',
+                    mainSavingsData.isNotEmpty
+                        ? 'Total to Save: Q.${(mainSavingsData[0]['objetive_amount'] as num).toStringAsFixed(2)}'
+                        : 'Total to Save: Q.0.00',
                     style: TextStyle(
                       color: colors.surface,
                       fontSize: 12.0,
@@ -184,14 +194,16 @@ class _SavingsSectionState extends State<SavingsSection> {
                 itemCount: savingsData.length,
                 itemBuilder: (context, index) {
                   final saving = savingsData[index];
-                  return SavingsCard(
-                    title: saving['title'] as String,
-                    savedAmount: (saving['actual_amount'] as num).toDouble(),
-                    goalAmount: (saving['objetive_amount'] as num).toDouble(),
-                    onEdit: () {
-                      // Handle edit action here
-                    },
-                  );
+                  if(saving['title'] as String != 'Main Savings') {
+                    return SavingsCard(
+                      title: saving['title'] as String,
+                      savedAmount: (saving['actual_amount'] as num).toDouble(),
+                      goalAmount: (saving['objetive_amount'] as num).toDouble(),
+                      onEdit: () {
+                        // Handle edit action here
+                      },
+                    );
+                  }
                 },
               ),
             )
