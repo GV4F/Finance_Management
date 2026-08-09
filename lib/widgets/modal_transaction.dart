@@ -48,6 +48,14 @@ class _ModalTransactionState extends State<ModalTransaction> {
         'amount': amount,
         'category': widget.type,
       });
+      await supabase.rpc(
+        'update_balance',
+        params: {
+          'increase': amount,
+          'p_user_id': supabase.auth.currentUser!.id,
+          'operation': widget.type == 'income' ? true : false,
+        }
+      );
       if(mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Transaction registered successfully!')),
