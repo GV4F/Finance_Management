@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 // * WIDGETS
 import '../widgets/historial_card.dart';
+import '../widgets/historial_modal.dart';
 
 class HistorialSection extends StatefulWidget {
   const HistorialSection({super.key});
@@ -89,7 +90,26 @@ class _HistorialSectionState extends State<HistorialSection> {
                 date: tx['date'] as String,
                 amount: (tx['amount'] as num).toDouble(),
                 type: ((tx['category'] as String) == 'income' ? true : false),
-                onTap: () {},
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    isScrollControlled: true,
+                    builder: (context) {
+                      return HistorialModal(
+                        transactionId: tx['id'] as String,
+                        title: tx['title'] as String,
+                        amount: (tx['amount'] as num).toDouble(),
+                        date: tx['date'] as String,
+                        description: tx['description'] ?? '',
+                        isIncome: ((tx['category'] as String) == 'income' ? true : false),
+                        onRevertSuccess: () {
+                          allTransactions(); 
+                        },
+                      );
+                    },
+                  );
+                },
               );
             },
           ),
