@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../utils/formatAmount.dart';
 
 class HistorialCard extends StatelessWidget {
   final String title;
@@ -21,11 +22,6 @@ class HistorialCard extends StatelessWidget {
   String formatDate(DateTime value) {
     final formatDate = DateFormat('yyyy-MM-dd');
     return formatDate.format(value);
-  }
-
-  String formatAmount(double value) {
-    final formatCurrency = NumberFormat.currency(locale: 'es_GT', symbol: 'Q', customPattern: '¤#,##0.00');
-    return formatCurrency.format(value);
   }
 
   @override

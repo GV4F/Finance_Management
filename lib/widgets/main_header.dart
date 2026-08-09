@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
+import '../utils/formatAmount.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MainHeader extends StatefulWidget {
   const MainHeader({super.key});
@@ -8,6 +11,31 @@ class MainHeader extends StatefulWidget {
 }
 
 class _MainHeaderState extends State<MainHeader> {
+
+  @override
+  void initState() {
+    super.initState();
+    getBalance();
+  }
+
+  double balance = 0.0;
+  bool isBalanceVisible = false;
+  Future<void> getBalance() async {
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser;
+
+    final response = await supabase
+        .from('balances')
+        .select()
+        .eq('id_user', user!.id)
+        .single();
+
+    if (!mounted) return;
+
+    setState(() {
+      balance = response['general_balances'] ?? 0.0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,20 +106,30 @@ class _MainHeaderState extends State<MainHeader> {
                                 fontSize: 16,
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.remove_red_eye_outlined, color: colors.tertiary, size: 25),
-                              onPressed: () => {},
-                            )
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isBalanceVisible = !isBalanceVisible;
+                                });
+                              },
+                              child: Icon(
+                                isBalanceVisible ? Icons.visibility : Icons.visibility_off,
+                                color: colors.tertiary,
+                                size: 25,
+                              ),
+                            ),
                           ],
                         ),
-                        Text(
-                          '*******',
-                          style: TextStyle(
-                            color: colors.primary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        ImageFiltered(
+                          imageFilter: ImageFilter.blur(
+                            sigmaX: isBalanceVisible ? 0.0 : 8.0,
+                            sigmaY: isBalanceVisible ? 0.0 : 8.0,
                           ),
-                        )
+                          child: Text(
+                            formatAmount(balance),
+                            style: TextStyle(color: colors.primary, fontSize: 24),
+                          ),
+                        ),
                       ],
                     ),
                   ),
