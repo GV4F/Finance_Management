@@ -204,6 +204,7 @@ class _SavingsSectionState extends State<SavingsSection> {
                       },
                     );
                   }
+                  return const SizedBox.shrink();
                 },
               ),
             )
