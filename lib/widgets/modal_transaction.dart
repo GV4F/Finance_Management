@@ -189,35 +189,14 @@ class _ModalTransactionState extends State<ModalTransaction> {
                 },
               ),
             ] else ... [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.text,
-              ),
+              _buildInput(label: 'Title', icon: Icons.tag, isNumber: false, controller: titleController)
             ],
 
             const SizedBox(height: 20),
-            TextField(
-              controller: descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.text,
-            ),
+            _buildInput(label: 'Description', icon: Icons.description, isNumber: false, controller: descriptionController),
 
             const SizedBox(height: 20),
-            TextField(
-              controller: amountController,
-              decoration: const InputDecoration(
-                labelText: 'Amount',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-            ),
+            _buildInput(label: 'Amount', icon: Icons.attach_money, isNumber: true, controller: amountController),
 
             const SizedBox(height: 20),
             MouseRegion(
@@ -285,3 +264,26 @@ class _ModalTransactionState extends State<ModalTransaction> {
     );
   }
 }
+
+Widget _buildInput({required String label, required IconData icon, required bool isNumber, required TextEditingController controller}) {
+    return TextField(
+      controller: controller,
+      keyboardType: isNumber ? const TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
+      style: const TextStyle(color: Colors.white, fontSize: 16.0),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14.0),
+        prefixIcon: Icon(icon, color: const Color(0xFF00E6C0), size: 20.0),
+        filled: true,
+        fillColor: const Color(0xFF121212).withValues(alpha: 0.5),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: BorderSide(color: Colors.grey.shade800),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Color(0xFF00E6C0), width: 1.5),
+        ),
+      ),
+    );
+  }
