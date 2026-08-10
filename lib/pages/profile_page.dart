@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // * Widgets
 import 'package:gvaf_finance_app/widgets/header_page.dart';
+import 'package:gvaf_finance_app/widgets/profile_section.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -11,7 +12,9 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          HeaderPage(titlePage: 'Profile')
+          HeaderPage(titlePage: 'Profile'),
+          SizedBox(height: 20),
+          ProfileSection(),
         ],
       ),
     );
