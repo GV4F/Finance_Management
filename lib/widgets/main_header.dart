@@ -16,6 +16,7 @@ class _MainHeaderState extends State<MainHeader> {
   void initState() {
     super.initState();
     getBalance();
+    getView();
   }
 
   double balance = 0.0;
@@ -34,6 +35,19 @@ class _MainHeaderState extends State<MainHeader> {
 
     setState(() {
       balance = response['general_balances'] ?? 0.0;
+    });
+  }
+
+  Future<void> getView() async {
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser?.id;
+
+    final response = await supabase.from('users').select('view').eq('id', user!).single();
+    final bool view = response['view'] ?? false;
+
+    if(!mounted) return;
+    setState(() {
+      isBalanceVisible = view;
     });
   }
 

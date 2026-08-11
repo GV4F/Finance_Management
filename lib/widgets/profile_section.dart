@@ -9,15 +9,12 @@ class ProfileSection extends StatefulWidget {
   State<ProfileSection> createState() => _ProfileSectionState();
 }
 
-Future<void> signOut() async{
-  final auth = AuthService();
-  await auth.signOut();
-}
-
 class _ProfileSectionState extends State<ProfileSection> {
+
   @override
   Widget build(BuildContext context) {
 
+    final auth = AuthService();
     final colors = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
@@ -67,7 +64,7 @@ class _ProfileSectionState extends State<ProfileSection> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              signOut();
+                              auth.signOut();
                             },
                             child: Container(
                               alignment: Alignment.center,
