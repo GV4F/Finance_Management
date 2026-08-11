@@ -15,18 +15,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    
-    // final colors = Theme.of(context).colorScheme;
-
     return Scaffold(
-      body: Column(
-        children: [
-          MainHeader(),
-          const SizedBox(height: 20),
-          const ActionsSection(),
-          const SizedBox(height: 20),
-          const UpcomingSection(),
-        ],
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              MainHeader(),
+              const SizedBox(height: 20),
+              const ActionsSection(),
+              const SizedBox(height: 20),
+              const UpcomingSection(),
+            ],
+          )
+        )
       )
     );
   }

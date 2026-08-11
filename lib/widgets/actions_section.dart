@@ -9,6 +9,7 @@ class ActionsSection extends StatelessWidget {
 
   void modalTransaction(BuildContext context, String type) {
     showDialog(
+      useRootNavigator: true,
       context: context,
       builder: (BuildContext context) {
         return ModalTransaction(type: type);
