@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/formatAmount.dart';
 
 class UpcomingPay extends StatelessWidget {
   final String title;
@@ -83,7 +84,7 @@ class UpcomingPay extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Q. ${amount.toStringAsFixed(2)}',
+                  formatAmount(amount),
                   style: TextStyle(
                     fontFamily: 'BrunoAce',
                     color: colors.onPrimary,

@@ -1,21 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // * WIDGETS
 import './upcoming_pay.dart';
 
-class UpcomingSection extends StatelessWidget {
+class UpcomingSection extends StatefulWidget {
   const UpcomingSection({super.key});
+
+  @override
+  State<UpcomingSection> createState() => _UpcomingSectionState();
+}
+
+class _UpcomingSectionState extends State<UpcomingSection> {
+
+  @override 
+  void initState() {
+    super.initState();
+    getAllPayments();
+  }
+
+  var payments = [];
+  Future<void> getAllPayments() async {
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser?.id;
+
+    var data = await supabase.from('upcoming_pays').select().eq('id_user', user!);
+
+    if(!mounted) return;
+    setState(() {
+      payments = data;
+    });
+  }
+
+  int getRemainingDays(String date) {
+    final DateTime dueDate = DateTime.parse(date);
+    final DateTime today = DateTime.now();
+    final int daysLeft = dueDate.difference(today).inDays;
+
+    return daysLeft;
+  }
+
+  Future<void> markPaymentAsPaid(String payId) async {
+    final supabase = Supabase.instance.client;
+    final userId = supabase.auth.currentUser!.id;
+
+    try {
+      await supabase.rpc('process_upcoming_payment', params: 
+        {
+          'p_payment_id': payId,
+          'p_user_id': userId
+        }
+      );
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pay successfully', style: TextStyle(fontFamily: 'Bruce Ace')),
+          backgroundColor: Color(0xFF00E5FF),
+        ),
+      );
+      await getAllPayments();
+    } catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $error', style: const TextStyle(fontFamily: 'Bruce Ace')),
+          backgroundColor: const Color(0xFFFF1744),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
 
     final colors = Theme.of(context).colorScheme;
-    final payments = [
-      {'title': 'YouTube Music', 'days': 15, 'amount': 75.00},
-      {'title': 'Gemini Pro', 'days': 25, 'amount': 30.00},
-      {'title': 'Eleven Labs', 'days': 30, 'amount': 38.00},
-      {'title': 'Spotify', 'days': 5, 'amount': 45.00},
-    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +97,7 @@ class UpcomingSection extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        '3',
+                        payments.length.toString(),
                         style: TextStyle(
                           fontFamily: 'BrunoAce',
                           color: colors.onSurface,
@@ -96,9 +156,9 @@ class UpcomingSection extends StatelessWidget {
               final payment = payments[index];
               return UpcomingPay(
                 title: payment['title'] as String,
-                daysLeft: payment['days'] as int,
+                daysLeft: getRemainingDays(payment['payment_date']),
                 amount: payment['amount'] as double,
-                onPaid: () {},
+                onPaid: () => markPaymentAsPaid(payment['id'] as String),
               );
             },
           ),
