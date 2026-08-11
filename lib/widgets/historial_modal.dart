@@ -212,7 +212,7 @@ class _HistorialModalState extends State<HistorialModal> {
                     side: const BorderSide(color: Color(0xFFFF1744), width: 1.5),
                   ),
                 ).copyWith(
-                  elevation: MaterialStateProperty.all(0),
+                  elevation: WidgetStateProperty.all(0),
                 ),
                 child: Ink(
                   decoration: BoxDecoration(
