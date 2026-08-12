@@ -21,6 +21,7 @@ class _MainHeaderState extends State<MainHeader> {
 
   double balance = 0.0;
   bool isBalanceVisible = false;
+  String userName = '';
   Future<void> getBalance() async {
     final supabase = Supabase.instance.client;
     final user = supabase.auth.currentUser;
@@ -42,12 +43,14 @@ class _MainHeaderState extends State<MainHeader> {
     final supabase = Supabase.instance.client;
     final user = supabase.auth.currentUser?.id;
 
-    final response = await supabase.from('users').select('view').eq('id', user!).single();
+    final response = await supabase.from('users').select().eq('id', user!).single();
     final bool view = response['view'] ?? false;
+    final String name = response['nombre'];
 
     if(!mounted) return;
     setState(() {
       isBalanceVisible = view;
+      userName = name;
     });
   }
 
@@ -83,7 +86,7 @@ class _MainHeaderState extends State<MainHeader> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Welcome Back, GVAF !',
+                      'Welcome Back, $userName !',
                       style: TextStyle(
                         color: colors.onPrimary,
                         fontSize: 19,

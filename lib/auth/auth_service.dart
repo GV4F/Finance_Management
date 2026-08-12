@@ -17,7 +17,7 @@ class AuthService {
       email: email,
       password: password,
       data: {
-        'name': name,
+        'nombre': name,
       }
     );
   }
