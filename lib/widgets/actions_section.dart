@@ -5,14 +5,18 @@ import './action_button.dart';
 import './modal_transaction.dart';
 
 class ActionsSection extends StatelessWidget {
-  const ActionsSection({super.key});
+   final Future<void> Function() getBalance;
+  const ActionsSection({
+    super.key,
+    required this.getBalance
+  });
 
   void modalTransaction(BuildContext context, String type) {
     showDialog(
       useRootNavigator: true,
       context: context,
       builder: (BuildContext context) {
-        return ModalTransaction(type: type);
+        return ModalTransaction(type: type, getBalance: getBalance);
       },
     );
   }

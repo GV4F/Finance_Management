@@ -3,9 +3,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ModalTransaction extends StatefulWidget {
   final String type;
+  final Future<void> Function() getBalance;
   const ModalTransaction({
     super.key,
-    required this.type
+    required this.type,
+    required this.getBalance
   });
 
   @override
@@ -56,6 +58,7 @@ class _ModalTransactionState extends State<ModalTransaction> {
           'operation': widget.type == 'income' ? true : false,
         }
       );
+      await widget.getBalance();
       if(mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Transaction registered successfully!')),

@@ -4,7 +4,11 @@ import '../utils/formatAmount.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MainHeader extends StatefulWidget {
-  const MainHeader({super.key});
+  final double balance;
+  const MainHeader({
+    super.key,
+    required this.balance
+  });
 
   @override
   State<MainHeader> createState() => _MainHeaderState();
@@ -15,29 +19,11 @@ class _MainHeaderState extends State<MainHeader> {
   @override
   void initState() {
     super.initState();
-    getBalance();
     getView();
   }
 
-  double balance = 0.0;
   bool isBalanceVisible = false;
   String userName = '';
-  Future<void> getBalance() async {
-    final supabase = Supabase.instance.client;
-    final user = supabase.auth.currentUser;
-
-    final response = await supabase
-        .from('balances')
-        .select()
-        .eq('id_user', user!.id)
-        .single();
-
-    if (!mounted) return;
-
-    setState(() {
-      balance = response['general_balances'] ?? 0.0;
-    });
-  }
 
   Future<void> getView() async {
     final supabase = Supabase.instance.client;
@@ -143,7 +129,7 @@ class _MainHeaderState extends State<MainHeader> {
                             sigmaY: isBalanceVisible ? 0.0 : 8.0,
                           ),
                           child: Text(
-                            formatAmount(balance),
+                            formatAmount(widget.balance),
                             style: TextStyle(color: colors.primary, fontSize: 24),
                           ),
                         ),

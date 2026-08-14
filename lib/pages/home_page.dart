@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // * WIDGETS
 import '../widgets/main_header.dart';
@@ -13,6 +14,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  double balance = 0.0;
+  Future<void> getBalance() async {
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser;
+
+    final response = await supabase
+        .from('balances')
+        .select()
+        .eq('id_user', user!.id)
+        .single();
+
+    if (!mounted) return;
+
+    setState(() {
+      balance = response['general_balances'] ?? 0.0;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getBalance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +47,9 @@ class _HomePageState extends State<HomePage> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              MainHeader(),
+              MainHeader(balance: balance),
               const SizedBox(height: 20),
-              const ActionsSection(),
+              ActionsSection(getBalance: getBalance),
               const SizedBox(height: 20),
               const UpcomingSection(),
             ],
