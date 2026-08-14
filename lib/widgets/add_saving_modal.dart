@@ -50,144 +50,146 @@ class _AddSavingModalState extends State<AddSavingModal> {
 
     final colors = Theme.of(context).colorScheme;
 
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-      child: Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Container(
-          padding: const EdgeInsets.all(24.0),
-          decoration: BoxDecoration(
-            color: colors.onPrimary.withValues(alpha: 0.85),
-            borderRadius: BorderRadius.circular(24.0),
-            border: Border.all(
-              color: colors.primary.withValues(alpha: 0.5), 
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: colors.primary.withValues(alpha: 0.2),
-                blurRadius: 20.0,
-                spreadRadius: 2.0,
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Container(
+            padding: const EdgeInsets.all(24.0),
+            decoration: BoxDecoration(
+              color: colors.onPrimary.withValues(alpha: 0.85),
+              borderRadius: BorderRadius.circular(24.0),
+              border: Border.all(
+                color: colors.primary.withValues(alpha: 0.5), 
+                width: 1.5,
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Título del Modal
-              Center(
-                child: Text(
-                  'NEW SAVINGS',
-                  style: TextStyle(
-                    fontFamily: 'Bruce Ace', 
-                    color: colors.primary,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
+              boxShadow: [
+                BoxShadow(
+                  color: colors.primary.withValues(alpha: 0.2),
+                  blurRadius: 20.0,
+                  spreadRadius: 2.0,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Título del Modal
+                Center(
+                  child: Text(
+                    'NEW SAVINGS',
+                    style: TextStyle(
+                      fontFamily: 'Bruce Ace', 
+                      color: colors.primary,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24.0),
+                const SizedBox(height: 24.0),
 
-              // 1. Campo: Título
-              _buildInput(
-                label: 'Title (e.g., RTX 5090)',
-                icon: Icons.track_changes,
-                isNumber: false,
-                controller: titleController,
-              ),
-              const SizedBox(height: 16.0),
+                // 1. Campo: Título
+                _buildInput(
+                  label: 'Title (e.g., RTX 5090)',
+                  icon: Icons.track_changes,
+                  isNumber: false,
+                  controller: titleController,
+                ),
+                const SizedBox(height: 16.0),
 
-              // 2. Campo: Objetivo Total
-              _buildInput(
-                label: 'Goal Amount (Q.)',
-                icon: Icons.flag,
-                isNumber: true,
-                controller: goalAmountController,
-              ),
-              const SizedBox(height: 16.0),
+                // 2. Campo: Objetivo Total
+                _buildInput(
+                  label: 'Goal Amount (Q.)',
+                  icon: Icons.flag,
+                  isNumber: true,
+                  controller: goalAmountController,
+                ),
+                const SizedBox(height: 16.0),
 
-              // 3. Campo: Cantidad Inicial
-              _buildInput(
-                label: 'Initial Amount (Q.)',
-                icon: Icons.account_balance_wallet,
-                isNumber: true,
-                controller: initialAmountController,
-              ),
-              const SizedBox(height: 32.0),
+                // 3. Campo: Cantidad Inicial
+                _buildInput(
+                  label: 'Initial Amount (Q.)',
+                  icon: Icons.account_balance_wallet,
+                  isNumber: true,
+                  controller: initialAmountController,
+                ),
+                const SizedBox(height: 32.0),
 
-              // Botones de Acción
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Botón Cancelar
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 14.0),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12.0),
-                          border: Border.all(color: colors.tertiary),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'CANCEL',
-                            style: TextStyle(
-                              color: colors.tertiary,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.2,
+                // Botones de Acción
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Botón Cancelar
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 14.0),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(12.0),
+                            border: Border.all(color: colors.tertiary),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'CANCEL',
+                              style: TextStyle(
+                                color: colors.tertiary,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16.0),
-                  // Botón Crear
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                        postNewSaving(
-                          titleController.text,
-                          double.tryParse(goalAmountController.text) ?? 0,
-                          double.tryParse(initialAmountController.text) ?? 0
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 14.0),
-                        decoration: BoxDecoration(
-                          color: colors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12.0),
-                          border: Border.all(color: colors.primary),
-                          boxShadow: [
-                            BoxShadow(
-                              color: colors.primary.withValues(alpha: 0.3),
-                              blurRadius: 8.0,
-                            )
-                          ]
-                        ),
-                        child: Center(
-                          child: Text(
-                            'CREATE',
-                            style: TextStyle(
-                              color: colors.primary,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.2,
+                    const SizedBox(width: 16.0),
+                    // Botón Crear
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          postNewSaving(
+                            titleController.text,
+                            double.tryParse(goalAmountController.text) ?? 0,
+                            double.tryParse(initialAmountController.text) ?? 0
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 14.0),
+                          decoration: BoxDecoration(
+                            color: colors.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12.0),
+                            border: Border.all(color: colors.primary),
+                            boxShadow: [
+                              BoxShadow(
+                                color: colors.primary.withValues(alpha: 0.3),
+                                blurRadius: 8.0,
+                              )
+                            ]
+                          ),
+                          child: Center(
+                            child: Text(
+                              'CREATE',
+                              style: TextStyle(
+                                color: colors.primary,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
