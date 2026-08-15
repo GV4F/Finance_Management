@@ -39,6 +39,13 @@ Una de las razones por las que decidí hacer mi propia app fue porque las apps c
 | :---: | :---: | :---: | :---: | :---: |
 | <img src="/assets/images/Welcome_finance.webp" width="160"/> | <img src="/assets/images/Login_finance.webp" width="160"/> | <img src="/assets/images/Home_finance.webp" width="160"/> | <img src="https://via.placeholder.com/200x400" width="160"/> | <img src="/assets/images/Profile_finance.webp" width="160"/> |
 
+
+
+https://github.com/user-attachments/assets/7db4f11d-b829-4e35-98e6-fca2fde88479
+
+
+
+
 ---
 
 ## ✨ Características Clave
