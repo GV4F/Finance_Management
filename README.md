@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="assets/images/logo.png" alt="GVAF Logo" width="120" />
+  <img src="/assets/images/Logo.png" alt="GVAF Logo" width="120" />
 
   # 🚀 GVAF — Personal Finance Management
 
@@ -26,12 +26,6 @@ Una de las razones por las que decidí hacer mi propia app fue porque las apps c
 **Intenté agregar todas las funciones necesarias para un buen manejo de finanzas, pero sí tú tienes más ideas o te gustaría tener acceso a la app, será un gusto charlar contigo por medio de mi correo.😉**
 
 ## 🎬 Demo & Capturas
-
-<div align="center">
-  <img src="https://via.placeholder.com/800x450.png?text=VIDEO+DEMO+DE+GVAF" alt="GVAF App Demo" width="100%" />
-</div>
-
-<br/>
 
 ### 📱 Vistas Principales
 
