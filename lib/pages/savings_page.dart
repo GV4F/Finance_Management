@@ -14,25 +14,32 @@ class SavingsPage extends StatefulWidget {
 }
 
 class _SavingsPageState extends State<SavingsPage> {
+  final GlobalKey<SavingsSectionState> _savingsSectionKey = GlobalKey<SavingsSectionState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          HeaderPage(titlePage: 'Savings'),
-          SizedBox(height: 20),
-          SavingsSection()
+          const HeaderPage(titlePage: 'Savings'),
+          const SizedBox(height: 20),
+          SavingsSection(key: _savingsSectionKey),
         ],
       ),
-      floatingActionButton: FloatingAddButton(onTap: () {
-        showDialog(
-          context: context,
-          barrierColor: Colors.black.withValues(alpha: 0.4),
-          builder: (BuildContext context) {
-            return const AddSavingModal(); 
-          },
-        );
-      }),
+      floatingActionButton: FloatingAddButton(
+        onTap: () async {
+          final result = await showDialog<bool>(
+            context: context,
+            barrierColor: Colors.black.withValues(alpha: 0.6),
+            builder: (BuildContext context) {
+              return const AddSavingModal(); 
+            },
+          );
+          if (result == true) {
+            _savingsSectionKey.currentState?.fetchSavingsData();
+          }
+        },
+      ),
     );
   }
 }

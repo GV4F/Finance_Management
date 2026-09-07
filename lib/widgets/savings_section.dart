@@ -8,50 +8,61 @@ class SavingsSection extends StatefulWidget {
   const SavingsSection({super.key});
 
   @override
-  State<SavingsSection> createState() => _SavingsSectionState();
+  State<SavingsSection> createState() => SavingsSectionState();
 }
 
-class _SavingsSectionState extends State<SavingsSection> {
-
+class SavingsSectionState extends State<SavingsSection> {
   @override
-  initState() {
+  void initState() {
     super.initState();
     fetchSavingsData();
   }
 
   List<dynamic> savingsData = [];
   List<dynamic> mainSavingsData = [];
+
   Future<void> fetchSavingsData() async {
-      final supabase = Supabase.instance.client;
-      final user = supabase.auth.currentUser;
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser;
 
-      try {
-        final data = await supabase
-            .from('savings')
-            .select()
-            .eq('id_user', user!.id);
+    if (user == null) return;
 
-        final mainSavings = data.firstWhere((item) => item['title'] as String == 'Main Savings');
-        if(!mounted) return;
-        setState(() {
-          mainSavingsData = [mainSavings];
-          savingsData = data;
-        });
-      } catch (e) {
-        if(mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error fetching savings data: $e')),
-          );
-        }
+    try {
+      final data = await supabase
+          .from('savings')
+          .select()
+          .eq('id_user', user.id);
+
+      final mainSavingsList = data
+          .where((item) => item['title']?.toString() == 'Main Savings')
+          .toList();
+
+      if (!mounted) return;
+      setState(() {
+        mainSavingsData = mainSavingsList.isNotEmpty ? [mainSavingsList.first] : [];
+        savingsData = data;
+      });
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error fetching savings data: $e')),
+        );
       }
     }
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final percentage = mainSavingsData.isNotEmpty
-        ? (mainSavingsData[0]['actual_amount'] as num) / (mainSavingsData[0]['objetive_amount'] as num)
-        : 0.0;
+
+    final double percentage;
+    if (mainSavingsData.isNotEmpty) {
+      final actual = (mainSavingsData[0]['actual_amount'] as num?)?.toDouble() ?? 0.0;
+      final objective = (mainSavingsData[0]['objetive_amount'] as num?)?.toDouble() ?? 0.0;
+      percentage = objective > 0.0 ? (actual / objective).clamp(0.0, 1.0) : 0.0;
+    } else {
+      percentage = 0.0;
+    }
 
     return Expanded(
       child: Padding(
@@ -67,7 +78,7 @@ class _SavingsSectionState extends State<SavingsSection> {
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFFB95CE4), colors.primary],
+                  colors: [const Color(0xFFB95CE4), colors.primary],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -100,7 +111,7 @@ class _SavingsSectionState extends State<SavingsSection> {
                   ),
                   Text(
                     mainSavingsData.isNotEmpty
-                        ? "Q.${(mainSavingsData[0]['actual_amount'] as num).toStringAsFixed(2)}"
+                        ? "Q.${((mainSavingsData[0]['actual_amount'] as num?)?.toDouble() ?? 0.0).toStringAsFixed(2)}"
                         : "Q.0.00",
                     style: TextStyle(
                       color: colors.onPrimary,
@@ -171,7 +182,7 @@ class _SavingsSectionState extends State<SavingsSection> {
 
                   Text(
                     mainSavingsData.isNotEmpty
-                        ? 'Total to Save: Q.${(mainSavingsData[0]['objetive_amount'] as num).toStringAsFixed(2)}'
+                        ? 'Total to Save: Q.${((mainSavingsData[0]['objetive_amount'] as num?)?.toDouble() ?? 0.0).toStringAsFixed(2)}'
                         : 'Total to Save: Q.0.00',
                     style: TextStyle(
                       color: colors.surface,
@@ -194,11 +205,11 @@ class _SavingsSectionState extends State<SavingsSection> {
                 itemCount: savingsData.length,
                 itemBuilder: (context, index) {
                   final saving = savingsData[index];
-                  if(saving['title'] as String != 'Main Savings') {
+                  if (saving['title']?.toString() != 'Main Savings') {
                     return SavingsCard(
-                      title: saving['title'] as String,
-                      savedAmount: (saving['actual_amount'] as num).toDouble(),
-                      goalAmount: (saving['objetive_amount'] as num).toDouble(),
+                      title: (saving['title'] ?? '').toString(),
+                      savedAmount: ((saving['actual_amount'] as num?)?.toDouble() ?? 0.0),
+                      goalAmount: ((saving['objetive_amount'] as num?)?.toDouble() ?? 0.0),
                       onEdit: () {
                         // Handle edit action here
                       },
@@ -210,7 +221,7 @@ class _SavingsSectionState extends State<SavingsSection> {
             )
           ],
         ),
-      )
+      ),
     );
   }
 }

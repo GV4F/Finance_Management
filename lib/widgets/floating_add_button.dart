@@ -9,9 +9,8 @@ class FloatingAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Positioned(
-      bottom: MediaQuery.of(context).size.height * 0.20,
-      right: MediaQuery.of(context).size.width * 0.05,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 60.0),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -21,7 +20,7 @@ class FloatingAddButton extends StatelessWidget {
             shape: BoxShape.circle,
             color: colors.onPrimary.withValues(alpha: 0.9),
             border: Border.all(
-              color: colors.primary, 
+              color: colors.primary,
               width: 1.5,
             ),
             boxShadow: [
