@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './confirmation_modal.dart';
 import './options_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -81,16 +82,40 @@ class _OptionsSectionState extends State<OptionsSection> {
             return OptionsCard(
               title: 'Clean Historial',
               icon: Icons.cleaning_services_outlined,
-              onTap: () {
-                cleanHistorialTransaction();
+              onTap: () async {
+                final confirmed = await ConfirmationModal.show(
+                  context: context,
+                  title: 'Clean Historial',
+                  message: 'Are you sure you want to clean your transaction history? This action cannot be undone.',
+                  confirmText: 'CLEAN',
+                  cancelText: 'CANCEL',
+                  icon: Icons.cleaning_services_outlined,
+                  isDestructive: true,
+                );
+
+                if (confirmed == true) {
+                  cleanHistorialTransaction();
+                }
               },
             );
           } else {
             return OptionsCard(
               title: 'Change default visibility',
               icon: Icons.remove_red_eye_outlined,
-              onTap: () {
-                changeViewProfile();
+              onTap: () async {
+                final confirmed = await ConfirmationModal.show(
+                  context: context,
+                  title: 'Change Visibility',
+                  message: 'Are you sure you want to change your default balance visibility?',
+                  confirmText: 'CONFIRM',
+                  cancelText: 'CANCEL',
+                  icon: Icons.remove_red_eye_outlined,
+                  isDestructive: false,
+                );
+
+                if (confirmed == true) {
+                  changeViewProfile();
+                }
               },
             );
           }
