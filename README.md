@@ -29,9 +29,9 @@ Una de las razones por las que decidí hacer mi propia app fue porque las apps c
 
 ### 📱 Vistas Principales
 
-| Welcome / Auth | Dashboard / Home | Historial | Savings / Metas | Perfil |
+| Welcome | Login | Home | Historial | Savings / Metas | Perfil |
 | :---: | :---: | :---: | :---: | :---: |
-| <img src="/assets/images/Welcome_finance.webp" width="160"/> | <img src="/assets/images/Login_finance.webp" width="160"/> | <img src="/assets/images/Home_finance.webp" width="160"/> | <img src="https://via.placeholder.com/200x400" width="160"/> | <img src="/assets/images/Profile_finance.webp" width="160"/> |
+| <img src="/assets/images/Welcome_finance.webp" width="160"/> | <img src="/assets/images/Login_finance.webp" width="160"/> | <img src="/assets/images/Home_finance.webp" width="160"/> | <img src="https://via.placeholder.com/200x400" width="160"/> | <img src="/assets/images/Historial_finance.webp" width="160"/> | <img src="/assets/images/Savings_finance.webp" width="160"/> | <img src="/assets/images/Profile_finance.webp" width="160"/> |
 
 
 
