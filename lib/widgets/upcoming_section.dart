@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // * WIDGETS
-import './modal_transaction.dart';
+import './modal_upcoming_payments.dart';
 import './upcoming_pay.dart';
 
 class UpcomingSection extends StatefulWidget {
