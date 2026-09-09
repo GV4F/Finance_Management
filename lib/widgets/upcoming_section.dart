@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // * WIDGETS
+import './modal_transaction.dart';
 import './upcoming_pay.dart';
 
 class UpcomingSection extends StatefulWidget {
@@ -12,6 +13,16 @@ class UpcomingSection extends StatefulWidget {
 }
 
 class _UpcomingSectionState extends State<UpcomingSection> {
+
+  void showUpcomingPaymentModal() {
+    showDialog(
+      useRootNavigator: true,
+      context: context,
+      builder: (BuildContext context) {
+        return ModalUpcomingPayment(getAllPayments: getAllPayments);
+      },
+    );
+  }
 
   @override 
   void initState() {
@@ -127,9 +138,9 @@ class _UpcomingSectionState extends State<UpcomingSection> {
               ),
               // - "View All"
               TextButton(
-                onPressed: () {},
+                onPressed: showUpcomingPaymentModal,
                 child: Text(
-                  'View All',
+                  'Create New',
                   style: TextStyle(
                     fontFamily: 'BrunoAce',
                     color: colors.onSurface,
